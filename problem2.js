@@ -1,86 +1,121 @@
 const fs = require("fs");
 
 function problem2() {
+
     fs.readFile("./data/lipsum.txt", 'utf-8', (error, data) => {
         if (error) {
             console.error(error);
         } else {
 
-            fs.writeFile("newfile1.txt", data.toUpperCase(), "utf8", (error) => {
+            let dataInUpperCase = data.toUpperCase()
+            let newFile1 = "newfile1.txt";
+
+            fs.writeFile(newFile1, dataInUpperCase + "\n", "utf8", (error) => {
                 if (error) {
                     console.error(error);
                 }
                 else {
-                    fs.writeFile("filenames.txt", "newfile1.txt ", (error, data) => {
+                    console.log(`${newFile1} is created`);
+
+                    fs.writeFile("filenames.txt", newFile1 + "\n", (error) => {
                         if (error) {
                             console.error(error);
                         } else {
+                            console.log(`Added ${newFile1} to filenames.txt`);
 
-                            fs.readFile("newfile1.txt", "utf8", (error, data) => {
+                            fs.readFile(newFile1, "utf8", (error, data) => {
                                 if (error) {
                                     console.error(error);
                                 } else {
-                                    fs.writeFile("newfile2.txt", data.toLowerCase(), "utf8", (error) => {
+
+                                    let dataInLowerCase = data.toLowerCase();
+                                    let dataInSentenceForm = dataInLowerCase.split(". ").join(".\n");
+                                    let newFile2 = "newfile2.txt";
+
+                                    fs.writeFile(newFile2, dataInSentenceForm, "utf8", (error) => {
                                         if (error) {
                                             console.error(error);
                                         } else {
-                                            fs.writeFile("filenames.txt", "newfile2.txt ", { flag: 'a' }, (error) => {
+                                            console.log(`${newFile2} is created`);
+
+                                            fs.writeFile("filenames.txt", newFile2 + "\n", { flag: 'a' }, (error) => {
                                                 if (error) {
                                                     console.error(error);
                                                 } else {
-                                                    fs.readFile("newfile2.txt", "utf-8", (error, data) => {
+                                                    console.log(`Added ${newFile2} to filenames.txt`);
+
+                                                    fs.readFile(newFile2, "utf-8", (error, data) => {
                                                         if (error) {
                                                             console.error(error);
                                                         } else {
-                                                            fs.writeFile("newfile3.txt", data, (error) => {
+
+                                                            let sortedData = data.split("\n").sort().join("\n");
+                                                            let newFile3 = "newfile3.txt";
+
+                                                            fs.writeFile(newFile3, sortedData, (error) => {
                                                                 if (error) {
                                                                     console.error(error);
                                                                 } else {
-                                                                    fs.writeFile("filenames.txt", "newfile3.txt ", { flag: 'a' }, (error) => {
+                                                                    console.log(`${newFile3} is created`);
+
+                                                                    fs.writeFile("filenames.txt", newFile3, { flag: 'a' }, (error) => {
                                                                         if (error) {
                                                                             console.error(error);
                                                                         } else {
+                                                                            console.log(`Added ${newFile3} to filenames.txt`);
 
                                                                             fs.readFile("filenames.txt", "utf-8", (error, data) => {
                                                                                 if (error) {
                                                                                     console.error(error);
                                                                                 } else {
-                                                                                    deleteFiles(data.split(" "));
+                                                                                    let allFileNames = data.split("\n");
+
+                                                                                    deleteFiles(allFileNames);
+
                                                                                 }
-                                                                            })
+                                                                            });
+
                                                                         }
-                                                                    })
+                                                                    });
+
                                                                 }
-                                                            })
+                                                            });
+
                                                         }
-                                                    })
+                                                    });
                                                 }
 
                                             });
+
                                         }
                                     });
+
                                 }
                             });
+
                         }
                     });
+
                 }
             });
+
         }
     });
 }
 module.exports = problem2;
-problem2();
 
-function deleteFiles(data) {
-    data.forEach(fileName => {
 
+function deleteFiles(allFileNames) {
+    allFileNames.forEach(fileName => {
+        console.log(fileName)
         fs.unlink(fileName, (error) => {
             if (error) {
-                console.error();
+                console.error(error);
             } else {
-                console.log(`file ${fileName} deleted`)
+                console.log(`file ${fileName} deleted`);
             }
         });
 
     });
+
 }
